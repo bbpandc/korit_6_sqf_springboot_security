@@ -1,0 +1,3 @@
+2024-08-26 15:18:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" already exists; SQL statement:
+CREATE TABLE USER ( id BIGINT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) UNIQUE not null, password VARCHAR(255) not null, name VARCHAR(255) not null ) [42101-200]

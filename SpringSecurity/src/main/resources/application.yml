@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/auth_db;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+jwt:
+  secret: 27e9a0fa79cee56b11162087cead041b49655cda021267968b8bf3ceb7887375e49d968141145ee6b1f7020c19c1cb09584c79aadae85d7657ef2efeb3974ab60add145ad360d24386705ab947fb7107b961b3064510917c736f9efc1d88f37a143af8763a33aa1959810821f6d3f58a04ba5dd1259cb9ad9a47c5bd75859ed7a77196918c55ad1a136eac47ebafee4454ee83d3a04d5d60a0cd5c5c37cd5981b4c3932e64ef56cd00144c867ac9848839feb8c35e43c9de3ed556c46e468e674dfd5598b4bb6f14f534082d07eb49b7c44244414fe83202a248872b8e6825168ac67949453fd755b3f0354fbb47c9cc5c6114a136905c3080c99ca0feb62bfa
+
+
