@@ -2,6 +2,7 @@ package com.study.SpringSecurityMybatis.config;
 
 import com.study.SpringSecurityMybatis.security.filter.JwtAccessTokenFilter;
 import com.study.SpringSecurityMybatis.security.handler.AuthenticationHandler;
+import com.study.SpringSecurityMybatis.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
 
-        http.exceptionHandling().authenticationEntryPoint(authenticationHandler);
+        http.exceptionHandling()
+                .authenticationEntryPoint(authenticationHandler);
 
         http.authorizeRequests()
                 .antMatchers("/auth/**", "/h2-console/**")
@@ -45,4 +47,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(jwtAccessTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 }

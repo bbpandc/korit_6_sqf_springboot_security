@@ -1,16 +1,15 @@
 package com.study.SpringSecurityMybatis.controller;
 
+import com.study.SpringSecurityMybatis.exception.AccessTokenValidException;
 import com.study.SpringSecurityMybatis.exception.SignupException;
 import com.study.SpringSecurityMybatis.exception.ValidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Set;
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
@@ -30,4 +29,8 @@ public class ExceptionControllerAdvice {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
+    @ExceptionHandler(AccessTokenValidException.class)
+    public ResponseEntity<?> accessTokenValidException(AccessTokenValidException e) {
+        return ResponseEntity.status(403).body(false);
+    }
 }

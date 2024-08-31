@@ -5,6 +5,7 @@ import com.study.SpringSecurityMybatis.dto.request.ReqSignupDto;
 import com.study.SpringSecurityMybatis.dto.response.RespDeleteUserDto;
 import com.study.SpringSecurityMybatis.dto.response.RespSigninDto;
 import com.study.SpringSecurityMybatis.dto.response.RespSignupDto;
+import com.study.SpringSecurityMybatis.dto.response.RespUserInfoDto;
 import com.study.SpringSecurityMybatis.entity.Role;
 import com.study.SpringSecurityMybatis.entity.User;
 import com.study.SpringSecurityMybatis.entity.UserRoles;
@@ -19,15 +20,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -43,8 +47,7 @@ public class UserService {
     @Autowired
     private JwtProvider jwtProvider;
 
-    public boolean isDuplicateUsername(String username) {
-        // return userMapper.findByUsername(username) != null;
+    public Boolean isDuplicateUsername(String username) {
         return Optional.ofNullable(userMapper.findByUsername(username)).isPresent();
     }
 
@@ -57,7 +60,7 @@ public class UserService {
 
             Role role = roleMapper.findByName("ROLE_USER");
 
-            if(role == null) {
+            if (role == null) {
                 role = Role.builder().name("ROLE_USER").build();
                 roleMapper.save(role);
             }
@@ -82,7 +85,6 @@ public class UserService {
 
     public RespSigninDto getGeneratedAccessToken(ReqSigninDto dto) {
         User user = checkUsernameAndPassword(dto.getUsername(), dto.getPassword());
-        jwtProvider.generateAccessToken(user);
 
         return RespSigninDto.builder()
                 .expireDate(jwtProvider.getExpireDate().toLocaleString())
@@ -94,11 +96,11 @@ public class UserService {
         User user = userMapper.findByUsername(username);
 
         if(user == null) {
-            throw new UsernameNotFoundException("사용자 정보를 다시 확인하세요.");
+            throw new UsernameNotFoundException("사용장 정보를 다시 확인하세요.");
         }
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("사용자 정보를 다시 확인하세요.");
+            throw new BadCredentialsException("사용장 정보를 다시 확인하세요.");
         }
 
         return user;
@@ -110,7 +112,7 @@ public class UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
         if(principalUser.getId() != id) {
-            throw new AuthenticationServiceException("삭제할 수 있는 권한이 없습니다.");
+            throw new AuthenticationServiceException("삭제 할 수 있는 권한이 없습니다.");
         }
         user = userMapper.findById(id);
         if(user == null) {
@@ -124,6 +126,20 @@ public class UserService {
                 .message("사용자 삭제 완료")
                 .deletedUser(user)
                 .build();
+    }
 
+    public RespUserInfoDto getUserInfo(Long id) {
+        User user = userMapper.findById(id);
+        Set<String> roles = user.getUserRoles().stream().map(
+                userRole -> userRole.getRole().getName()
+        ).collect(Collectors.toSet());
+
+        return RespUserInfoDto.builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .name(user.getName())
+                .email(user.getEmail())
+                .roles(roles)
+                .build();
     }
 }

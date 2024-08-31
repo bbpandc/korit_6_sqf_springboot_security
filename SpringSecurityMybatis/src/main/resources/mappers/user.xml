@@ -10,6 +10,7 @@
         <result property="username" column="username" />
         <result property="password" column="password" />
         <result property="name" column="name" />
+        <result property="email" column="email" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRolesResultMap" />
     </resultMap>
 
@@ -28,51 +29,56 @@
     <delete id="deleteById">
         delete
         from
-            user
+        user
         where
-            id = #{id}
+        id = #{id}
     </delete>
 
     <select id="findByUsername" resultMap="userResultMap">
         select
-            u.id as user_id,
-            u.username,
-            u.password,
-            u.name,
-            ur.id as user_roles_id,
-            ur.user_id as ur_user_id,
-            ur.role_id as ur_role_id,
-            r.id as role_id,
-            r.name as role_name
+        u.id as user_id,
+        u.username,
+        u.password,
+        u.name,
+        u.email,
+        ur.id as user_roles_id,
+        ur.user_id as ur_user_id,
+        ur.role_id as ur_role_id,
+        r.id as role_id,
+        r.name as role_name
         from
-            user u
-            left outer join user_roles ur on(ur.user_id = u.id)
-            left outer join role r on(r.id = ur.role_id)
+        user u
+        left outer join user_roles ur on(ur.user_id = u.id)
+        left outer join role r on(r.id = ur.role_id)
         where
-            username = #{username}
+        username = #{username}
     </select>
 
     <select id="findById" resultMap="userResultMap">
         select
-            u.id as user_id,
-            u.username,
-            u.password,
-            u.name,
-            ur.id as user_roles_id,
-            ur.user_id as ur_user_id,
-            ur.role_id as ur_role_id,
-            r.id as role_id,
-            r.name as role_name
+        u.id as user_id,
+        u.username,
+        u.password,
+        u.name,
+        u.email,
+        ur.id as user_roles_id,
+        ur.user_id as ur_user_id,
+        ur.role_id as ur_role_id,
+        r.id as role_id,
+        r.name as role_name
         from
-            user u
-            left outer join user_roles ur on(ur.user_id = u.id)
-            left outer join role r on(r.id = ur.role_id)
+        user u
+        left outer join user_roles ur on(ur.user_id = u.id)
+        left outer join role r on(r.id = ur.role_id)
         where
-            u.id = #{id}
+        u.id = #{id}
     </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save"
+            useGeneratedKeys="true"
+            keyProperty="id">
         insert into user
-        values(default, #{username}, #{password}, #{name})
+        values(default, #{username}, #{password}, #{name}, #{email})
     </insert>
+
 </mapper>
