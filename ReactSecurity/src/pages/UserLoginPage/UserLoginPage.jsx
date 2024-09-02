@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signinApi } from '../../apis/signinApi';
+import { instance } from '../../apis/util/instance';
 /** @jsxImportSource @emotion/react */
 
 const layout = css`
@@ -70,6 +71,8 @@ const loginButton = css`
 `;
 
 function UserLoginPage(props) {
+    const navigate = useNavigate();
+
     const [ inputUser, setInputUser ] = useState({
         username: "",
         password: "",
@@ -121,7 +124,17 @@ function UserLoginPage(props) {
         }
 
         localStorage.setItem("accessToken", "Bearer " + signinData.token.accessToken);
-        window.location.replace("/");
+        
+        instance.interceptors.request.use(config => {
+            config.headers["Authorization"] = localStorage.getItem("accessToken");
+            return config;
+        });
+
+        if(window.history.length > 2) {
+            navigate(-1); // 뒤로가기
+            return;
+        }
+        navigate("/");
     }
 
     return (

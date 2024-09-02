@@ -85,6 +85,12 @@ const profileImgBox = css`
     width: 64px;
     height: 64px;
     box-shadow: 0px 0px 2px #00000088;
+    cursor: pointer;
+    overflow: hidden;
+
+    & > img {
+        height: 100%;
+    }
 `;
 
 const profileInfo = css`
@@ -114,6 +120,9 @@ function IndexPage(props) {
     const userInfoState = queryClient.getQueryState("userInfoQuery");
     const accessTokenValidState = queryClient.getQueryState("accessTokenValidQuery");
 
+    console.log(accessTokenValidState);
+    console.log(userInfoState);
+
     const handleLoginButtonOnClick = () => {
         navigate("/user/login");
     }
@@ -123,49 +132,49 @@ function IndexPage(props) {
         window.location.replace("/");
     }
 
-    console.log(userInfoState.status)
+    console.log(userInfoState.status);
 
     return (
         <div css={layout}>
             <header css={header}>
                 <input type="search" placeholder='검색어를 입력해 주세요.'/>
             </header>
-            {
-                accessTokenValidState.status === "idle" || accessTokenValidState.status ===  "loading" 
-                ? <></> 
-                : 
-                <main css={main}>
+
+            <main css={main}>
                     <div css={leftBox}></div>
                     {
-                        userInfoState.status === "success" ?
+                        accessTokenValidState.status !== "success"
+                        ?
+                            accessTokenValidState.status !== "error"
+                            ?
+                            <></>
+                            :
+                            <div css={rightBox}>
+                                <p>더 안전하고 편리하게 이용하세요</p>
+                                <button onClick={handleLoginButtonOnClick}>로그인</button>
+                                <div>
+                                    <Link to={"/user/help/id"}>아이디 찾기</Link>
+                                    <Link to={"/user/help/pw"}>비밀번호 찾기</Link>
+                                    <Link to={"/user/join"}>회원가입</Link>
+                                </div>
+                            </div>
+                        :
                         <div css={rightBox}>
                             <div css={userInfoBox}>
-                                <div css={profileImgBox}>
-                                    <img src="" alt="" />
+                                <div css={profileImgBox} onClick={() => navigate("/profile")}>
+                                    <img src={userInfoState.data?.data.img} alt="" />
                                 </div>
                                 <div css={profileInfo}>
                                     <div>
-                                        <div>{userInfoState.data.data.username}님</div>
-                                        <div>{userInfoState.data.data.email}</div>
+                                        <div>{userInfoState.data?.data.username}님</div>
+                                        <div>{userInfoState.data?.data.email}</div>
                                     </div>
                                     <button onClick={handleLogoutButtonOnClick}>로그아웃</button>
                                 </div>
                             </div>
                         </div>
-                        :
-                        <div css={rightBox}>
-                            <p>더 안전하고 편리하게 이용하세요</p>
-                            <button onClick={handleLoginButtonOnClick}>로그인</button>
-                            <div>
-                                <Link to={"/user/help/id"}>아이디 찾기</Link>
-                                <Link to={"/user/help/pw"}>비밀번호 찾기</Link>
-                                <Link to={"/user/join"}>회원가입</Link>
-                            </div>
-                        </div>
                     }
-                </main>
-            }
-            
+            </main>
         </div>
     );
 }
