@@ -1096,3 +1096,6 @@ select
 2024-08-29 11:29:40 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE 'USER'[*] ADD COLUMN EMAIL VARCHAR(255) NOT NULL"; expected "identifier"; SQL statement:
 ALTER TABLE 'USER' ADD COLUMN email VARCHAR(255) NOT NULL [42001-200]
+2024-09-04 10:31:08 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "TRUNVATE[*] TABLE OAUTH2_USER"; expected "TRUNCATE"; SQL statement:
+TRUNVATE TABLE OAUTH2_USER [42001-200]

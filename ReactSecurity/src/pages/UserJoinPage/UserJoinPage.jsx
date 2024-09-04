@@ -14,7 +14,7 @@ const layout = css`
 const logo = css`
     font-size: 24px;
     margin-bottom: 40px;
-`
+`;
 
 const joinInfoBox = css`
     display: flex;

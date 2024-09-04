@@ -15,7 +15,7 @@ const layout = css`
 const logo = css`
     font-size: 24px;
     margin-bottom: 40px;
-`
+`;
 
 const loginInfoBox = css`
     display: flex;
@@ -151,6 +151,9 @@ function UserLoginPage(props) {
                 </div>
             </div>
             <button css={loginButton} onClick={handleLoginSubmitOnClick}>로그인</button>
+            <a href="http://localhost:8080/oauth2/authorization/google">구글로그인</a>
+            <a href="http://localhost:8080/oauth2/authorization/naver">네이버로그인</a>
+            <a href="http://localhost:8080/oauth2/authorization/kakao">카카오로그인</a>
         </div>
     );
 }
